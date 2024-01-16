@@ -9,6 +9,16 @@ const int cellSize = 30;
 int numbers[gridSize][gridSize] = {};
 bool isBlack[gridSize][gridSize] = {};
 
+void randomizeGrid() {
+    std::srand(static_cast<unsigned int>(std::time(nullptr)));
+
+    for (int i = 0; i < gridSize; ++i) {
+        for (int j = 0; j < gridSize; ++j) {
+            isBlack[i][j] = std::rand() % 2;  // Инициализация случайным образом
+        }
+    }
+}
+
 void calculateNumbers() {
     for (int i = 0; i < gridSize; ++i) {
         for (int j = 0; j < gridSize; ++j) {
@@ -27,20 +37,6 @@ void calculateNumbers() {
     }
 }
 
-void randomizeGrid() {
-    std::srand(static_cast<unsigned int>(std::time(nullptr)));
-
-    for (int i = 0; i < gridSize; ++i) {
-        for (int j = 0; j < gridSize; ++j) {
-            isBlack[i][j] = std::rand() % 2;  // Инициализация случайным образом
-            numbers[i][j] = 0;
-        }
-    }
-    calculateNumbers();
-}
-
-
-
 void drawGrid(sf::RenderWindow& window, sf::Font& font) {
     for (int i = 0; i < gridSize; ++i) {
         for (int j = 0; j < gridSize; ++j) {
@@ -58,6 +54,7 @@ void drawGrid(sf::RenderWindow& window, sf::Font& font) {
                 window.draw(text);
             }
             else {
+                // Если не черный, отрисовываем белый квадрат и цифру
                 cell.setFillColor(sf::Color::White);
                 sf::Text text(std::to_string(numbers[i][j]), font, 16);
                 text.setPosition(i * cellSize + 10, j * cellSize + 5);
@@ -65,16 +62,28 @@ void drawGrid(sf::RenderWindow& window, sf::Font& font) {
                 window.draw(cell);
                 window.draw(text);
             }
+
         }
     }
 }
 
-void handleMouseClick(sf::Vector2i mousePos, sf::Mouse::Button button) {
+void handleKeyPress(sf::Keyboard::Key key, sf::Vector2i mousePos) {
     int i = mousePos.x / cellSize;
     int j = mousePos.y / cellSize;
 
-    if (button == sf::Mouse::Left) {
-        isBlack[i][j] = !isBlack[i][j];  // Переключение состояния при нажатии левой кнопки мыши
+    if (key == sf::Keyboard::Space) {
+        // Переключение состояния всех черных квадратов при нажатии пробела
+        for (int i = 0; i < gridSize; ++i) {
+            for (int j = 0; j < gridSize; ++j) {
+                if (isBlack[i][j]) {
+                    isBlack[i][j] = !isBlack[i][j];
+                }
+            }
+        }
+    }
+    else if (key == sf::Keyboard::L) {
+        // Переключение состояния квадрата по координатам при нажатии левой кнопки мыши
+        isBlack[i][j] = !isBlack[i][j];
     }
 }
 
@@ -99,10 +108,15 @@ int main() {
             else if (event.type == sf::Event::MouseButtonPressed) {
                 sf::Vector2i mousePos = sf::Mouse::getPosition(window);
                 if (event.mouseButton.button == sf::Mouse::Left) {
-                    handleMouseClick(mousePos, sf::Mouse::Left);
+                    handleKeyPress(sf::Keyboard::L, mousePos);
                 }
             }
+            else if (event.type == sf::Event::KeyPressed) {
+                handleKeyPress(event.key.code, sf::Mouse::getPosition(window));
+              
+            }
         }
+        
 
         window.clear(sf::Color::White);
         drawGrid(window, font);
