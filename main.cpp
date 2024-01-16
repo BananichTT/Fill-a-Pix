@@ -9,16 +9,6 @@ const int cellSize = 30;
 int numbers[gridSize][gridSize] = {};
 bool isBlack[gridSize][gridSize] = {};
 
-void randomizeGrid() {
-    std::srand(static_cast<unsigned int>(std::time(nullptr)));
-
-    for (int i = 0; i < gridSize; ++i) {
-        for (int j = 0; j < gridSize; ++j) {
-            isBlack[i][j] = std::rand() % 2;  // Инициализация случайным образом
-        }
-    }
-}
-
 void calculateNumbers() {
     for (int i = 0; i < gridSize; ++i) {
         for (int j = 0; j < gridSize; ++j) {
@@ -36,6 +26,20 @@ void calculateNumbers() {
         }
     }
 }
+
+void randomizeGrid() {
+    std::srand(static_cast<unsigned int>(std::time(nullptr)));
+
+    for (int i = 0; i < gridSize; ++i) {
+        for (int j = 0; j < gridSize; ++j) {
+            isBlack[i][j] = std::rand() % 2;  // Инициализация случайным образом
+            numbers[i][j] = 0;
+        }
+    }
+    calculateNumbers();
+}
+
+
 
 void drawGrid(sf::RenderWindow& window, sf::Font& font) {
     for (int i = 0; i < gridSize; ++i) {
