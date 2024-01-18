@@ -9,6 +9,7 @@ const int cellSize = 30;
 int numbers[gridSize][gridSize] = {};
 bool isBlack[gridSize][gridSize] = {};
 
+// Инициализация сетки случайным образом
 void randomizeGrid() {
     std::srand(static_cast<unsigned int>(std::time(nullptr)));
 
@@ -19,6 +20,7 @@ void randomizeGrid() {
     }
 }
 
+// Расчет чисел в клетках сетки
 void calculateNumbers() {
     for (int i = 0; i < gridSize; ++i) {
         for (int j = 0; j < gridSize; ++j) {
@@ -37,6 +39,7 @@ void calculateNumbers() {
     }
 }
 
+// Проверка, решен ли пазл
 bool isPuzzleSolved() {
     for (int i = 0; i < gridSize; ++i) {
         for (int j = 0; j < gridSize; ++j) {
@@ -79,13 +82,12 @@ bool isPuzzleSolved() {
     return true;
 }
 
-
+// Показ поздравительного сообщения
 void showCongratulations(sf::RenderWindow& window, sf::Font& font) {
-    // Создаем два объекта sf::Text для двух строк
+   
     sf::Text text1("Congratulations!", font, 30);
     sf::Text text2("Puzzle Solved!", font, 30);
 
-    // Устанавливаем текст по центру окна
     sf::FloatRect textRect1 = text1.getLocalBounds();
     text1.setOrigin(textRect1.left + textRect1.width / 2.0f,
         textRect1.top + textRect1.height / 2.0f);
@@ -96,7 +98,6 @@ void showCongratulations(sf::RenderWindow& window, sf::Font& font) {
         textRect2.top + textRect2.height / 2.0f);
     text2.setPosition(window.getSize().x / 2.0f, window.getSize().y / 2.0f + 20.0f); // Опускаем вторую строку немного ниже
 
-    // Устанавливаем цвет текста
     text1.setFillColor(sf::Color::Black);
     text2.setFillColor(sf::Color::Black);
 
@@ -105,7 +106,6 @@ void showCongratulations(sf::RenderWindow& window, sf::Font& font) {
     window.draw(text2);
     window.display();
 
-    // Подождем некоторое время
     sf::Clock clock;
     while (clock.getElapsedTime().asSeconds() < 2) {
         sf::Event event;
@@ -117,6 +117,7 @@ void showCongratulations(sf::RenderWindow& window, sf::Font& font) {
     }
 }
 
+// Отрисовка сетки
 void drawGrid(sf::RenderWindow& window, sf::Font& font) {
     for (int i = 0; i < gridSize; ++i) {
         for (int j = 0; j < gridSize; ++j) {
@@ -147,6 +148,7 @@ void drawGrid(sf::RenderWindow& window, sf::Font& font) {
     }
 }
 
+// Обработка нажатий клавиш
 void handleKeyPress(sf::Keyboard::Key key, sf::Vector2i mousePos, sf::RenderWindow& window, sf::Font& font) {
     int i = mousePos.x / cellSize;
     int j = mousePos.y / cellSize;
@@ -182,7 +184,7 @@ void handleKeyPress(sf::Keyboard::Key key, sf::Vector2i mousePos, sf::RenderWind
 int main() {
     sf::RenderWindow window(sf::VideoMode(gridSize * cellSize, gridSize * cellSize + 100), "Fill-a-Pix");
     
-
+    // Загрузка шрифта
     sf::Font font;
     if (!font.loadFromFile("C:/Windows/Fonts/arial.ttf")) {
         std::cerr << "Ошибка загрузки шрифта!" << std::endl;
@@ -205,6 +207,7 @@ int main() {
     infoText1.setFillColor(sf::Color::Black);
     infoText2.setFillColor(sf::Color::Black);
 
+    // Главный цикл приложения
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event)) {
@@ -222,6 +225,7 @@ int main() {
             }
         }
 
+        // Очистка и отрисовка окна
         window.clear(sf::Color::White);
         window.draw(infoText1);
         window.draw(infoText2);
