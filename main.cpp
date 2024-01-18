@@ -180,7 +180,8 @@ void handleKeyPress(sf::Keyboard::Key key, sf::Vector2i mousePos, sf::RenderWind
 }
 
 int main() {
-    sf::RenderWindow window(sf::VideoMode(gridSize * cellSize, gridSize * cellSize), "Jhaphan_mosaika");
+    sf::RenderWindow window(sf::VideoMode(gridSize * cellSize, gridSize * cellSize + 100), "Fill-a-Pix");
+    
 
     sf::Font font;
     if (!font.loadFromFile("C:/Windows/Fonts/arial.ttf")) {
@@ -190,6 +191,19 @@ int main() {
 
     randomizeGrid();
     calculateNumbers();
+
+    
+    sf::Text infoText1("Press Space to toggle black squares.", font, 16);
+    sf::Text infoText2("Press Enter to check puzzle.", font, 16);
+
+    float textWidth1 = infoText1.getGlobalBounds().width;
+    float textWidth2 = infoText2.getGlobalBounds().width;
+
+    infoText1.setPosition((window.getSize().x - textWidth1) / 2.0f, window.getSize().y - 50);
+    infoText2.setPosition((window.getSize().x - textWidth2) / 2.0f, window.getSize().y - 30);
+
+    infoText1.setFillColor(sf::Color::Black);
+    infoText2.setFillColor(sf::Color::Black);
 
     while (window.isOpen()) {
         sf::Event event;
@@ -209,6 +223,8 @@ int main() {
         }
 
         window.clear(sf::Color::White);
+        window.draw(infoText1);
+        window.draw(infoText2);
         drawGrid(window, font);
         window.display();
     }
